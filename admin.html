@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nhập liệu Lịch phân xe ô tô — Văn phòng Tỉnh uỷ Cao Bằng</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="page narrow">
+    <header class="masthead">
+      <div class="org">Tỉnh uỷ Cao Bằng · Văn phòng Tỉnh uỷ</div>
+      <h1>NHẬP LIỆU LỊCH PHÂN XE Ô TÔ DÙNG CHUNG</h1>
+      <div class="subtitle">Dành cho Cán bộ quản lý và Lái xe được phân quyền</div>
+    </header>
+
+    <div id="loginView" class="card login-card">
+      <h2>Đăng nhập</h2>
+      <p class="hint">Vui lòng đăng nhập bằng tài khoản được cấp để nhập/sửa lịch phân xe.</p>
+      <div id="loginStatus"></div>
+      <label>Tên đăng nhập</label>
+      <input type="text" id="loginUsername" maxlength="10" placeholder="VD: linhdx" autocomplete="username" />
+      <label>Mật khẩu</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
+      <button class="btn primary wide" id="loginBtn">Đăng nhập</button>
+      <a class="admin-link" href="index.html">← Về trang xem lịch phân xe</a>
+    </div>
+
+    <div id="editorView" style="display:none;">
+      <div class="toolbar">
+        <div class="who">
+          Đang đăng nhập: <strong id="whoName"></strong> <span id="whoRoleBadge"></span>
+        </div>
+        <div class="toolbar-actions">
+          <a class="btn" href="index.html">Xem lịch</a>
+          <button class="btn" id="logoutBtn">Đăng xuất</button>
+        </div>
+      </div>
+
+      <div id="saveStatus"></div>
+
+      <div class="nav-row">
+        <button class="btn" id="prevWeekBtn">‹ Tuần trước</button>
+        <div class="week-range" id="weekRangeBox"><span id="weekRangeText">—</span></div>
+        <button class="btn" id="nextWeekBtn">Tuần sau ›</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn" id="thisWeekBtn">Về tuần này</button>
+        <button class="btn" id="copyPrevBtn">Sao chép nội dung từ tuần trước</button>
+        <button class="btn ghost" id="togglePasswordBtn">Đổi mật khẩu của tôi ▾</button>
+        <button class="btn ghost" id="toggleCarsBtn">Sửa danh sách xe ▾</button>
+        <button class="btn ghost" id="toggleAccountsBtn">Quản lý tài khoản đăng nhập ▾</button>
+      </div>
+
+      <div class="card" id="passwordPanel" style="display:none;">
+        <h3>Đổi mật khẩu của tôi</h3>
+        <div id="passwordStatus"></div>
+        <label>Mật khẩu hiện tại</label>
+        <input type="password" id="oldPassword" autocomplete="current-password" />
+        <label>Mật khẩu mới (tối thiểu 6 ký tự)</label>
+        <input type="password" id="newPassword" autocomplete="new-password" />
+        <label>Nhập lại mật khẩu mới</label>
+        <input type="password" id="newPassword2" autocomplete="new-password" />
+        <button class="btn primary wide" id="changePasswordBtn">Cập nhật mật khẩu</button>
+      </div>
+
+      <div class="card" id="carsPanel" style="display:none;">
+        <h3>Danh sách xe (áp dụng cho mọi tuần)</h3>
+        <p class="hint">Chỉ Cán bộ quản lý được sửa danh sách xe.</p>
+        <div id="carsForm"></div>
+        <button class="btn ghost" id="addCarRowBtn">+ Thêm xe</button>
+        <button class="btn primary" id="saveCarsBtn">Lưu danh sách xe</button>
+      </div>
+
+      <div class="card" id="accountsPanel" style="display:none;">
+        <h3>Quản lý tài khoản đăng nhập</h3>
+        <p class="hint">Chỉ Cán bộ quản lý được thêm tài khoản mới và khoá/mở khoá tài khoản.</p>
+        <div id="accountsStatus"></div>
+        <div id="accountsList"></div>
+
+        <h3 class="accounts-subhead">Thêm tài khoản mới</h3>
+        <label>Họ và tên</label>
+        <input type="text" id="newAccDisplayName" placeholder="VD: Nguyễn Văn A" />
+        <label>Tên đăng nhập (chữ và số, tối đa 10 ký tự)</label>
+        <input type="text" id="newAccUsername" maxlength="10" placeholder="VD: nguyenvana" />
+        <label>Vai trò</label>
+        <select id="newAccRole">
+          <option value="driver">Lái xe</option>
+          <option value="manager">Cán bộ quản lý</option>
+        </select>
+        <div id="newAccCarRow">
+          <label>Xe phụ trách (chỉ áp dụng với Lái xe)</label>
+          <select id="newAccCar"></select>
+        </div>
+        <label>Mật khẩu ban đầu</label>
+        <input type="password" id="newAccPassword" placeholder="Tối thiểu 6 ký tự" />
+        <button class="btn primary wide" id="addAccountBtn">+ Thêm tài khoản</button>
+      </div>
+
+      <div id="daysEditor"></div>
+
+      <div class="save-bar">
+        <button class="btn primary wide" id="saveWeekBtn">💾 Lưu lịch phân xe tuần này</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
