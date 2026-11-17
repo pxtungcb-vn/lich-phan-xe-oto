@@ -15,6 +15,7 @@
       <div class="subtitle">Dành cho Cán bộ quản lý và Lái xe được phân quyền</div>
     </header>
 
+    <!-- Màn hình đăng nhập -->
     <div id="loginView" class="card login-card">
       <h2>Đăng nhập</h2>
       <p class="hint">Vui lòng đăng nhập bằng tài khoản được cấp để nhập/sửa lịch phân xe.</p>
@@ -27,6 +28,7 @@
       <a class="admin-link" href="index.html">← Về trang xem lịch phân xe</a>
     </div>
 
+    <!-- Màn hình nhập liệu -->
     <div id="editorView" style="display:none;">
       <div class="toolbar">
         <div class="who">
@@ -51,6 +53,7 @@
         <button class="btn ghost" id="togglePasswordBtn">Đổi mật khẩu của tôi ▾</button>
         <button class="btn ghost" id="toggleCarsBtn">Sửa danh sách xe ▾</button>
         <button class="btn ghost" id="toggleAccountsBtn">Quản lý tài khoản đăng nhập ▾</button>
+        <button class="btn ghost" id="toggleImportBtn">Nhập dữ liệu từ file (Word/PDF) ▾</button>
       </div>
 
       <div class="card" id="passwordPanel" style="display:none;">
@@ -98,6 +101,24 @@
         <button class="btn primary wide" id="addAccountBtn">+ Thêm tài khoản</button>
       </div>
 
+      <div class="card" id="importPanel" style="display:none;">
+        <h3>Nhập dữ liệu từ file Thông báo (Word/PDF)</h3>
+        <p class="hint">
+          Chọn file Thông báo Lịch phân xe (.docx hoặc .pdf) để tự động đọc và điền vào lịch của
+          <strong>tuần đang chọn</strong> ở bên dưới. Hệ thống sẽ tự tách nội dung từng ô thành buổi
+          Sáng/Chiều theo giờ ghi trong văn bản. Khuyến nghị dùng file Word (.docx) để có kết quả
+          chính xác nhất; file PDF là tính năng thử nghiệm. Sau khi nhập, vui lòng kiểm tra lại từng ô
+          trước khi bấm "Lưu lịch phân xe tuần này".
+        </p>
+        <div id="importStatus"></div>
+        <input type="file" id="importFile" accept=".docx,.pdf" />
+        <button class="btn primary" id="importParseBtn" style="margin-top:10px;">Phân tích file</button>
+        <div id="importPreview"></div>
+        <button class="btn primary wide" id="importApplyBtn" style="display:none;margin-top:14px;">
+          Áp dụng vào tuần đang chọn
+        </button>
+      </div>
+
       <div id="daysEditor"></div>
 
       <div class="save-bar">
@@ -106,6 +127,15 @@
     </div>
   </div>
 
+  <!-- Thư viện đọc file Word/PDF ở phía trình duyệt (chỉ dùng cho mục "Nhập dữ liệu từ file") -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.worker.min.js";
+    }
+  </script>
   <script type="module" src="admin.js"></script>
 </body>
 </html>
