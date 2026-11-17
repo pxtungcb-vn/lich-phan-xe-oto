@@ -117,14 +117,23 @@ export function neighborWeekId(weekId, delta) {
   return getWeekId(monday);
 }
 
-// Mỗi ngày trong tuần chỉ có 1 ô nội dung tự do cho mỗi xe (không chia Sáng/Chiều
-// như App Lịch công tác — vì lịch phân xe chỉ cần 1 dòng mô tả giờ+việc).
+// Mỗi ngày, mỗi xe có 2 ô nội dung: Sáng và Chiều — để lãnh đạo nhìn vào biết
+// ngay buổi nào xe đang bận, buổi nào xe còn trống mà bố trí đi công tác.
+export const SESSIONS = [
+  { key: "morning", label: "Sáng" },
+  { key: "afternoon", label: "Chiều" },
+];
+
 export function buildWeekDays(monday) {
   const days = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(d.getDate() + i);
-    days.push({ date: toDateStr(d), weekday: WEEKDAY_LABELS[i], text: "" });
+    days.push({
+      date: toDateStr(d),
+      weekday: WEEKDAY_LABELS[i],
+      sessions: { morning: "", afternoon: "" },
+    });
   }
   return days;
 }
