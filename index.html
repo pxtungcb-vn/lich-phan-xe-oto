@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lịch phân xe ô tô dùng chung — Văn phòng Tỉnh uỷ Cao Bằng</title>
+<meta name="description" content="Lịch phân xe ô tô dùng chung của Văn phòng Tỉnh uỷ Cao Bằng - cập nhật theo thời gian thực" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <div class="top-actions">
+      <a class="btn" href="admin.html">Nhập dữ liệu</a>
+    </div>
+    <header class="masthead">
+      <div class="org">Tỉnh uỷ Cao Bằng · Văn phòng Tỉnh uỷ</div>
+      <h1>LỊCH PHÂN XE Ô TÔ DÙNG CHUNG</h1>
+      <div class="subtitle">Cập nhật theo thời gian thực</div>
+      <div class="week-range" id="weekRange">
+        <span class="live-dot"></span>
+        <span id="weekRangeText">Đang tải…</span>
+      </div>
+    </header>
+
+    <div class="nav-row">
+      <button class="btn" id="prevWeekBtn">‹ Tuần trước</button>
+      <button class="btn primary" id="thisWeekBtn">Tuần này</button>
+      <button class="btn" id="nextWeekBtn">Tuần sau ›</button>
+    </div>
+
+    <div class="view-switch" id="viewSwitch">
+      <span class="view-switch-label">Hiển thị:</span>
+      <button class="view-btn active" id="viewCardBtn" type="button">🗂️ Dạng thẻ</button>
+      <button class="view-btn" id="viewOfficialBtn" type="button">📄 Dạng bảng Thông báo</button>
+    </div>
+
+    <div id="statusArea"></div>
+
+    <div id="loadingArea" class="loading">
+      <div class="spinner"></div>
+      Đang tải lịch phân xe…
+    </div>
+
+    <div class="schedule-table-wrap" id="tableWrap" style="display:none;">
+      <table class="schedule" id="scheduleTable">
+        <thead>
+          <tr id="tableHeadRow">
+            <th style="width:90px;">Ngày</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="day-cards" id="dayCards"></div>
+
+    <div class="official-wrap" id="officialWrap" style="display:none;">
+      <div class="official-header">
+        <div class="official-doctitle">THÔNG BÁO</div>
+        <div class="official-docsubtitle">Lịch phân xe ô tô dùng chung</div>
+        <div class="official-docweek" id="officialWeekText"></div>
+      </div>
+      <div class="official-table-scroll">
+        <table class="official-table" id="officialTable">
+          <thead>
+            <tr id="officialHeadRow">
+              <th style="width:90px;">Ngày</th>
+            </tr>
+          </thead>
+          <tbody id="officialBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Trang hiển thị tự cập nhật ngay khi dữ liệu thay đổi — không cần tải lại trang.<br />
+      <a class="admin-link" href="admin.html">Đăng nhập nhập liệu (dành cho người có trách nhiệm)</a>
+    </div>
+  </div>
+
+  <script type="module" src="display.js"></script>
+</body>
+</html>
