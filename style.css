@@ -215,10 +215,24 @@ table.schedule tbody tr:nth-child(even) td:not(.day-cell) {
 
 .session-block {
   margin-bottom: 8px;
+  border-radius: 7px;
+  transition: background 0.15s ease;
 }
 
 .session-block:last-child {
   margin-bottom: 0;
+}
+
+/* Ô có nội dung (xe đang được phân công) được tô nền để nổi bật hơn hẳn
+   so với các ô "✓ Xe trống" — giúp lãnh đạo lướt nhanh thấy ngay xe nào bận. */
+.session-block.used {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.16) 0%, rgba(164, 24, 31, 0.07) 100%);
+  border-left: 3px solid var(--red);
+  padding: 6px 9px 6px 8px;
+}
+
+.session-block.used .session-label {
+  color: var(--red-dark);
 }
 
 .session-label {
@@ -238,6 +252,16 @@ table.schedule tbody tr:nth-child(even) td:not(.day-cell) {
   color: #b7b2a4;
   font-style: italic;
   font-weight: 400;
+}
+
+.session-text.free {
+  color: #1e7a34;
+  font-weight: 700;
+}
+
+.official-free {
+  color: #1e7a34;
+  font-weight: 700;
 }
 
 /* ---------- Mobile cards ---------- */
@@ -351,7 +375,7 @@ a.admin-link:hover {
   text-decoration: underline;
 }
 
-/* ---------- Chuyen doi che do hien thi ---------- */
+/* ---------- Chuyển đổi chế độ hiển thị (Dạng thẻ / Dạng bảng Thông báo) ---------- */
 .view-switch {
   display: flex;
   justify-content: center;
@@ -390,7 +414,7 @@ a.admin-link:hover {
   border-color: var(--red);
 }
 
-/* ---------- Dang bang Thong bao ---------- */
+/* ---------- Dạng bảng Thông báo (khung văn bản hành chính truyền thống) ---------- */
 .official-wrap {
   background: #ffffff;
   border: 1px solid #000;
@@ -487,6 +511,7 @@ table.official-table td.official-day-cell {
 
 .official-line {
   margin-bottom: 4px;
+  border-radius: 3px;
 }
 
 .official-line:last-child {
@@ -495,6 +520,14 @@ table.official-table td.official-day-cell {
 
 .official-line b {
   font-weight: 700;
+}
+
+/* Đồng bộ với dạng Thẻ: dòng có nội dung (xe đang bận) được tô nền nhẹ để
+   nổi bật hơn so với dòng "Trống" — vẫn giữ được vẻ trang trọng để in ấn. */
+.official-line.used {
+  background: rgba(201, 162, 39, 0.18);
+  border-left: 3px solid var(--red);
+  padding: 3px 7px 3px 6px;
 }
 
 @media print {
@@ -512,14 +545,4 @@ table.official-table td.official-day-cell {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 4px;
-}
-
-.session-text.free {
-  color: #1e7a34;
-  font-weight: 700;
-}
-
-.official-free {
-  color: #1e7a34;
-  font-weight: 700;
 }
