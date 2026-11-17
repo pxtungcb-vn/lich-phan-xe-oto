@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// Firestore Security Rules — App "Lịch phân xe ô tô dùng chung"
+// Văn phòng Tỉnh uỷ Cao Bằng
+//
+// Cấu trúc dữ liệu:
+//   accounts/{uid}            -> { username, displayName, role: "manager"|"driver",
+//                                   carId: <string|null>, disabled: bool, createdAt, createdBy }
+//   settings/cars             -> { list: [ {id, bienSo, taiXe, dienThoai}, ... ] }
+//   weeks/{weekId}/cars/{carId} -> { carId, days: [ {date, weekday, text}, ... 7 ngày ] }
+//
+// Phân quyền:
+//   - manager: đọc/ghi mọi collection; được tạo account mới (accounts/*).
+//   - driver : chỉ đọc; chỉ ghi được đúng weeks/{weekId}/cars/{carId} có carId khớp
+//              với carId trong hồ sơ accounts/{uid} của chính mình; KHÔNG được tạo
+//              hay sửa accounts/* (trừ việc tự đổi mật khẩu, việc này xử lý hoàn
+//              toàn ở Firebase Auth, không cần Firestore rule riêng).
+//   - Giống 2 App trước (Lịch công tác online): trang xem công khai (index.html)
+//     KHÔNG cần đăng nhập — ai có đường link cũng xem được lịch phân xe và
+//     danh sách xe. Chỉ trang Admin (admin.html, nhập/sửa dữ liệu) mới cần
+//     đăng nhập bằng tài khoản được cấp.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function accountDoc() {
+      return get(/databases/$(database)/documents/accounts/$(request.auth.uid));
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isActiveAccount() {
+      return isSignedIn()
+        && accountDoc().data.disabled != true;
+    }
+
+    function isManager() {
+      return isActiveAccount() && accountDoc().data.role == "manager";
+    }
+
+    function isDriverOfCar(carId) {
+      return isActiveAccount()
+        && accountDoc().data.role == "driver"
+        && accountDoc().data.carId == carId;
+    }
+
+    // ----- Tài khoản -----
+    match /accounts/{uid} {
+      allow read: if isActiveAccount();
+      allow create, update, delete: if isManager();
+    }
+
+    // ----- Danh sách xe (biển số, tài xế, số điện thoại) -----
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isManager();
+    }
+
+    // ----- Lịch phân xe theo tuần, theo từng xe -----
+    match /weeks/{weekId}/cars/{carId} {
+      allow read: if true;
+      allow write: if isManager() || isDriverOfCar(carId);
+    }
+  }
+}
