@@ -107,11 +107,14 @@ function sessionsFor(carsData, carId, dateStr) {
 }
 
 function sessionBlocksHtml(sessions) {
-  return SESSIONS.map((s) => `
-    <div class="session-block">
+  return SESSIONS.map((s) => {
+    const used = (sessions[s.key] || "").trim() ? " used" : "";
+    return `
+    <div class="session-block${used}">
       <div class="session-label">${s.label}</div>
       ${sessionHtml(sessions[s.key])}
-    </div>`).join("");
+    </div>`;
+  }).join("");
 }
 
 function renderWeek(carsData) {
@@ -162,7 +165,8 @@ function officialCellHtml(carsData, carId, dateStr) {
     const content = t
       ? escapeHtml(t).replace(/\n/g, "<br/>")
       : `<span class="official-free">Trống</span>`;
-    return `<div class="official-line"><b>${s.label}:</b> ${content}</div>`;
+    const used = t ? " used" : "";
+    return `<div class="official-line${used}"><b>${s.label}:</b> ${content}</div>`;
   }).join("");
 }
 
