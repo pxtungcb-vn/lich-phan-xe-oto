@@ -513,3 +513,13 @@ table.official-table td.official-day-cell {
   justify-content: flex-end;
   margin-bottom: 4px;
 }
+
+.session-text.free {
+  color: #1e7a34;
+  font-weight: 700;
+}
+
+.official-free {
+  color: #1e7a34;
+  font-weight: 700;
+}
