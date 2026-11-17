@@ -273,3 +273,39 @@ input:focus, textarea:focus {
 @media (max-width: 680px) {
   .car-form-row { grid-template-columns: 1fr; }
 }
+
+/* ---------- Nhập dữ liệu từ file (Word/PDF) ---------- */
+input[type="file"] {
+  display: block;
+  width: 100%;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  background: #fcfcfa;
+}
+
+.import-preview-scroll {
+  overflow-x: auto;
+  margin-top: 14px;
+}
+
+table.import-preview-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+  font-size: 12px;
+}
+
+table.import-preview-table th,
+table.import-preview-table td {
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+  vertical-align: top;
+  text-align: left;
+}
+
+table.import-preview-table thead th {
+  background: #faf7f0;
+  color: var(--red-dark);
+}
