@@ -54,6 +54,7 @@
         <button class="btn ghost" id="toggleCarsBtn">Sửa danh sách xe ▾</button>
         <button class="btn ghost" id="toggleAccountsBtn">Quản lý tài khoản đăng nhập ▾</button>
         <button class="btn ghost" id="toggleImportBtn">Nhập dữ liệu từ file (Word/PDF) ▾</button>
+        <button class="btn ghost" id="toggleStatsBtn">Thống kê lượt xem ▾</button>
       </div>
 
       <div class="card" id="passwordPanel" style="display:none;">
@@ -117,6 +118,12 @@
         <button class="btn primary wide" id="importApplyBtn" style="display:none;margin-top:14px;">
           Áp dụng vào tuần đang chọn
         </button>
+      </div>
+
+      <div class="card" id="statsPanel" style="display:none;">
+        <h3>Thống kê lượt xem</h3>
+        <p class="hint">Số liệu đơn giản, không thu thập thông tin cá nhân của người xem.</p>
+        <div id="statsContent">Đang tải…</div>
       </div>
 
       <div id="daysEditor"></div>
