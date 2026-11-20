@@ -38,6 +38,7 @@ import {
   WEEKDAY_LABELS,
   buildWeekDays,
   SESSIONS,
+  getPageViewStats,
 } from "./shared.js";
 import { DEFAULT_CARS, firebaseConfig } from "./firebase-config.js";
 
@@ -94,6 +95,10 @@ const els = {
   newAccCar: document.getElementById("newAccCar"),
   newAccPassword: document.getElementById("newAccPassword"),
   addAccountBtn: document.getElementById("addAccountBtn"),
+
+  toggleStatsBtn: document.getElementById("toggleStatsBtn"),
+  statsPanel: document.getElementById("statsPanel"),
+  statsContent: document.getElementById("statsContent"),
 };
 
 let cars = DEFAULT_CARS;
@@ -460,6 +465,28 @@ els.addAccountBtn.addEventListener("click", async () => {
     els.addAccountBtn.disabled = false;
   }
 });
+
+// ---------------- Thống kê lượt xem ----------------
+
+els.toggleStatsBtn.addEventListener("click", () => {
+  const show = els.statsPanel.style.display === "none";
+  els.statsPanel.style.display = show ? "" : "none";
+  els.toggleStatsBtn.textContent = show ? "Thống kê lượt xem ▴" : "Thống kê lượt xem ▾";
+  if (show) loadStats();
+});
+
+async function loadStats() {
+  els.statsContent.textContent = "Đang tải…";
+  try {
+    const stats = await getPageViewStats();
+    els.statsContent.innerHTML =
+      `<p>Tổng lượt xem: <strong>${stats.totalViews.toLocaleString("vi-VN")}</strong></p>` +
+      `<p>Số người xem (ước tính, theo trình duyệt): <strong>${stats.uniqueVisitors.toLocaleString("vi-VN")}</strong></p>`;
+  } catch (e) {
+    console.error(e);
+    els.statsContent.textContent = "Không tải được thống kê lượt xem.";
+  }
+}
 
 // ---------------- Tải / điều hướng tuần ----------------
 
