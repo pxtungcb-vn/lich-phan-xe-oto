@@ -8,7 +8,7 @@ import {
   collection,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import { db, getWeekId, formatDMY, weekIdToMonday, toDateStr, WEEKDAY_LABELS, SESSIONS } from "./shared.js";
+import { db, getWeekId, formatDMY, weekIdToMonday, toDateStr, WEEKDAY_LABELS, SESSIONS, recordPageView } from "./shared.js";
 import { DEFAULT_CARS } from "./firebase-config.js";
 
 const els = {
@@ -279,6 +279,7 @@ els.thisBtn.addEventListener("click", () => {
 });
 
 (async function init() {
+  recordPageView();
   await loadCars();
   subscribeToWeek(currentWeekId);
 })();
