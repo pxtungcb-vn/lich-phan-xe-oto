@@ -8,6 +8,7 @@ rules_version = '2';
 //                                   carId: <string|null>, disabled: bool, createdAt, createdBy }
 //   settings/cars             -> { list: [ {id, bienSo, taiXe, dienThoai}, ... ] }
 //   weeks/{weekId}/cars/{carId} -> { carId, days: [ {date, weekday, text}, ... 7 ngày ] }
+//   stats/viewCounter         -> { totalViews: number, uniqueVisitors: number }
 //
 // Phân quyền:
 //   - manager: đọc/ghi mọi collection; được tạo account mới (accounts/*).
@@ -44,6 +45,20 @@ service cloud.firestore {
       return isActiveAccount()
         && accountDoc().data.role == "driver"
         && accountDoc().data.carId == carId;
+    }
+
+    // Bo dem luot xem cong khai: chi 2 truong so, ghi cong khai (khong dang nhap), moi nguoi deu doc duoc.
+    match /stats/{statId} {
+      allow read: if true;
+      allow create: if statId == 'viewCounter'
+        && request.resource.data.keys().hasOnly(['totalViews', 'uniqueVisitors'])
+        && request.resource.data.totalViews is int
+        && request.resource.data.uniqueVisitors is int;
+      allow update: if statId == 'viewCounter'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalViews', 'uniqueVisitors'])
+        && request.resource.data.totalViews is int
+        && request.resource.data.uniqueVisitors is int;
+      allow delete: if false;
     }
 
     // ----- Tài khoản -----
