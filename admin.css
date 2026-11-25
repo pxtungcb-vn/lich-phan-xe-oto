@@ -1,5 +1,5 @@
 .page.narrow {
-  max-width: 820px;
+  max-width: 1180px;
 }
 
 .card {
@@ -77,57 +77,161 @@ input:focus, textarea:focus {
   color: var(--ink-soft);
 }
 
-.day-editor-card {
+/* ---------- Bảng nhập liệu thủ công (giống khung Thông báo) ---------- */
+
+.editor-table-wrap {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  margin-bottom: 16px;
-  overflow: hidden;
+  overflow: auto;
+  max-height: 74vh;
+  margin-bottom: 10px;
 }
 
-.day-editor-card .day-editor-head {
-  background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+table.editor-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13.5px;
+}
+
+table.editor-table th,
+table.editor-table td {
+  border: 1px solid var(--border);
+  padding: 0;
+  vertical-align: top;
+}
+
+table.editor-table th.col-time,
+table.editor-table td.editor-day-cell {
+  width: 100px;
+}
+
+table.editor-table th:not(.col-time),
+table.editor-table td.editor-entry-cell {
+  width: 190px;
+}
+
+table.editor-table thead th {
+  background: linear-gradient(180deg, var(--red) 0%, var(--red-dark) 100%);
   color: #fff;
-  padding: 11px 16px;
   font-weight: 700;
-  display: flex;
-  justify-content: space-between;
+  text-align: center;
+  padding: 10px 8px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
-.leader-edit-block {
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
+table.editor-table thead th.col-time {
+  z-index: 4;
+  left: 0;
+  position: sticky;
 }
 
-.leader-edit-block .lname {
+.editor-leader-name {
+  display: block;
+  font-size: 13px;
+}
+
+.editor-leader-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.92;
+  margin-top: 2px;
+}
+
+table.editor-table td.editor-day-cell {
+  background: #faf7f0;
+  text-align: center;
   font-weight: 700;
   color: var(--red-dark);
-  font-size: 13.5px;
-  margin-bottom: 8px;
+  padding: 10px 6px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
 }
 
-.session-pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+td.editor-day-cell .editor-date {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin-top: 2px;
 }
 
-@media (max-width: 560px) {
-  .session-pair { grid-template-columns: 1fr; }
+table.editor-table tbody tr:nth-child(even) td.editor-entry-cell {
+  background: #fcfcfa;
 }
 
-.session-field label {
-  margin: 0 0 4px;
-  font-size: 12px;
-  color: var(--gold);
-  text-transform: uppercase;
+.entry-slot {
+  border-bottom: 1px dashed var(--border);
+}
+
+.entry-slot:last-child {
+  border-bottom: none;
+}
+
+.entry-label {
+  display: block;
   font-weight: 700;
+  color: var(--gold);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 6px 10px 0;
 }
 
-.session-field textarea {
-  min-height: 64px;
-  resize: vertical;
+textarea.entry-textarea {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 2px 10px 8px;
+  line-height: 1.45;
+  min-height: 30px;
+}
+
+textarea.entry-textarea:focus {
+  outline: none;
+  background: #fff7e0;
+  box-shadow: none;
+}
+
+textarea.entry-textarea::placeholder {
+  color: #b7b2a4;
+  font-style: italic;
+}
+
+.editor-hint {
+  margin-top: 4px;
+}
+
+table.editor-table td.editor-entry-cell.my-car-col {
+  background: #fff8f0;
+}
+
+table.editor-table thead th.my-car-col {
+  background: linear-gradient(180deg, var(--gold) 0%, #a6791c 100%);
+}
+
+.my-car-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #fdeee0;
+  color: #b4600a;
 }
 
 .leader-form-row {
@@ -219,42 +323,6 @@ input:focus, textarea:focus {
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
-}
-
-/* ---------- Khoi nhap lieu theo xe ---------- */
-.car-edit-block {
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-}
-
-.car-edit-block .car-title {
-  font-weight: 700;
-  color: var(--red-dark);
-  font-size: 13.5px;
-  margin-bottom: 8px;
-}
-
-.car-edit-block textarea {
-  min-height: 64px;
-  resize: vertical;
-}
-
-.car-edit-block.my-car {
-  background: #fff8f0;
-}
-
-.car-edit-block.my-car .car-title::after {
-  content: "Xe của tôi";
-  display: inline-block;
-  margin-left: 8px;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: #fdeee0;
-  color: #b4600a;
-  vertical-align: middle;
 }
 
 .role-badge.driver-badge {
