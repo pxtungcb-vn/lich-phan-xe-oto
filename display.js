@@ -31,7 +31,7 @@ const els = {
 };
 
 const VIEW_MODE_KEY = "lptOnlineViewMode";
-let viewMode = localStorage.getItem(VIEW_MODE_KEY) === "official" ? "official" : "card";
+let viewMode = localStorage.getItem(VIEW_MODE_KEY) === "card" ? "card" : "official";
 
 let currentWeekId = getWeekId(new Date());
 let unsubscribeWeek = null;
