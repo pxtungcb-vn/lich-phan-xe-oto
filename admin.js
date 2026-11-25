@@ -347,8 +347,7 @@ function populateNewAccCarSelect() {
 
 function carLabel(carId) {
   const c = cars.find((x) => x.id === carId);
-  return c ? `${c.bienSo} (${c.taiXe})` : "(không rõ)";
-}
+  return c ? `${c.bienSo} (${c.taiXe})` : "(không rõ)";}
 
 function roleLabel(role) {
   return role === "manager" ? "Cán bộ quản lý" : "Lái xe";
@@ -598,6 +597,11 @@ els.copyPrevBtn.addEventListener("click", async () => {
 
 // ---------------- Soạn / lưu lịch tuần ----------------
 
+function autoResizeTextarea(ta) {
+  ta.style.height = "auto";
+  ta.style.height = ta.scrollHeight + "px";
+}
+
 function renderDaysEditor() {
   const monday = weekIdToMonday(currentWeekId);
   const vCars = visibleCars();
@@ -608,30 +612,66 @@ function renderDaysEditor() {
     dateStrs.push(toDateStr(d));
   }
 
-  els.daysEditor.innerHTML = dateStrs.map((dateStr, dayIdx) => {
-    const blocks = vCars.map((c) => {
+  const colCount = vCars.length;
+  const tableMinWidth = 100 + colCount * 190;
+  const isDriver = currentAccount.role === "driver";
+
+  const headerCells = vCars.map((c) => `
+    <th${isDriver ? ' class="my-car-col"' : ""}>
+      <span class="editor-leader-name">${escapeHtml(c.bienSo)}</span>
+      <span class="editor-leader-title">${escapeHtml(c.taiXe)}</span>
+      ${isDriver ? '<span class="my-car-badge">Xe của tôi</span>' : ""}
+    </th>
+  `).join("");
+
+  const bodyRows = dateStrs.map((dateStr, dayIdx) => {
+    const cells = vCars.map((c) => {
       const entry = ensureDayEntry(c.id, dateStr, dayIdx, monday);
-      const fields = SESSIONS.map((s) => `
-        <div class="session-field">
-          <label>${s.label}</label>
-          <textarea data-day="${dayIdx}" data-car="${c.id}" data-session="${s.key}" placeholder="Giờ và nội dung công việc buổi ${s.label.toLowerCase()}…">${escapeHtml(entry.sessions?.[s.key] || "")}</textarea>
-        </div>`).join("");
-      return `
-        <div class="car-edit-block${currentAccount.role === "driver" ? " my-car" : ""}">
-          <div class="car-title">${escapeHtml(c.bienSo)} (${escapeHtml(c.taiXe)})</div>
-          <div class="session-pair">${fields}</div>
-        </div>`;
+      const slots = SESSIONS.map((s) => `
+        <div class="entry-slot">
+          <span class="entry-label">${escapeHtml(s.label)}:</span>
+          <textarea
+            class="entry-textarea"
+            data-day="${dayIdx}" data-car="${c.id}" data-session="${s.key}"
+            placeholder="Giờ và nội dung công việc buổi ${s.label.toLowerCase()}…"
+            rows="1"
+          >${escapeHtml(entry.sessions?.[s.key] || "")}</textarea>
+        </div>
+      `).join("");
+      return `<td class="editor-entry-cell${isDriver ? " my-car-col" : ""}">${slots}</td>`;
     }).join("");
 
     return `
-      <div class="day-editor-card">
-        <div class="day-editor-head">
-          <span>${WEEKDAY_LABELS[dayIdx]}</span>
-          <span>${formatDMY(dateStr)}</span>
-        </div>
-        ${blocks}
-      </div>`;
+      <tr>
+        <td class="editor-day-cell">
+          <span class="d">${WEEKDAY_LABELS[dayIdx]}</span>
+          <span class="editor-date">(${formatDMY(dateStr)})</span>
+        </td>
+        ${cells}
+      </tr>`;
   }).join("");
+
+  els.daysEditor.innerHTML = `
+    <div class="editor-table-wrap">
+      <table class="editor-table" style="width:100%; min-width:${tableMinWidth}px;">
+        <thead>
+          <tr>
+            <th class="col-time">Thời gian</th>
+            ${headerCells}
+          </tr>
+        </thead>
+        <tbody>
+          ${bodyRows}
+        </tbody>
+      </table>
+    </div>
+    <p class="hint editor-hint">Bấm chuột vào ô "Sáng"/"Chiều" tương ứng rồi gõ nội dung trực tiếp, giống như đánh máy trong bảng Word. Nhớ bấm "Lưu lịch công tác tuần này" sau khi nhập xong.</p>
+  `;
+
+  els.daysEditor.querySelectorAll(".entry-textarea").forEach((ta) => {
+    autoResizeTextarea(ta);
+    ta.addEventListener("input", () => autoResizeTextarea(ta));
+  });
 }
 
 function ensureDayEntry(carId, dateStr, dayIdx, monday) {
@@ -656,8 +696,7 @@ function collectWeekDataFromForm() {
     if (day) {
       if (!day.sessions) day.sessions = { morning: "", afternoon: "" };
       day.sessions[sessionKey] = ta.value;
-    }
-  });
+    }  });
 }
 
 els.saveWeekBtn.addEventListener("click", async () => {
